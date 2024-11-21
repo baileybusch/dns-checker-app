@@ -1,9 +1,12 @@
+export interface SPFConfig {
+  requireExactMatch: boolean;
+  requiredIncludes: string[];
+  allowPartialMatch: boolean;
+  validAllModifiers: string[];
+}
+
 export interface DNSCheckConfig {
-  spf: {
-    requireExactMatch: boolean;
-    requiredIncludes: string[];
-    allowPartialMatch: boolean;
-  };
+  spf: SPFConfig;
   dkim: {
     requireExactMatch: boolean;
     allowPartialMatch: boolean;

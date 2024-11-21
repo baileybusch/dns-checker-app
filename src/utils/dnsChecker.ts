@@ -51,12 +51,11 @@ export async function verifyDNSRecord(record: any, config: DNSCheckConfig) {
     // Process the records based on type
     switch (record.type) {
       case 'SPF': {
-        const spfRecords = data.Answer?.filter((answer: any) => 
+        const spfRecord = data.Answer.find((answer: any) => 
           answer.data.includes('v=spf1')
         );
-        
-        // No SPF record found - Invalid
-        if (!spfRecords || spfRecords.length === 0) {
+
+        if (!spfRecord) {
           return {
             isValid: false,
             status: 'invalid',
@@ -66,39 +65,44 @@ export async function verifyDNSRecord(record: any, config: DNSCheckConfig) {
           };
         }
 
-        const spfRecord = spfRecords[0].data.replace(/"/g, '');
-        const exactMatch = spfRecord.trim() === 'v=spf1 include:_spf.cordialmail.net ~all';
-        const hasRequiredInclude = spfRecord.includes('include:_spf.cordialmail.net ~all');
+        const actualValue = spfRecord.data.replace(/"/g, '');
+        const spfConfig = config.spf;
+        
+        // Check for required includes
+        for (const include of spfConfig.requiredIncludes) {
+          const includeFound = actualValue.toLowerCase().includes(include.toLowerCase());
+          if (!includeFound) {
+            return {
+              isValid: false,
+              status: 'invalid',
+              message: `Missing required include: ${include}`,
+              value: actualValue,
+              matchesExpected: false
+            };
+          }
+        }
 
-        // Case 1: Exact match
-        if (exactMatch) {
+        // Check for valid all modifier
+        const hasValidAllModifier = spfConfig.validAllModifiers.some(modifier => 
+          actualValue.toLowerCase().trim().endsWith(modifier.toLowerCase())
+        );
+
+        if (!hasValidAllModifier) {
           return {
-            isValid: true,
-            status: 'valid',
-            message: 'SPF record matches exactly',
-            value: spfRecord,
-            matchesExpected: true
+            isValid: false,
+            status: 'invalid',
+            message: `SPF record must end with one of: ${spfConfig.validAllModifiers.join(' or ')}`,
+            value: actualValue,
+            matchesExpected: false
           };
         }
 
-        // Case 2: Contains Cordial include but not exact match
-        if (hasRequiredInclude) {
-          return {
-            isValid: true,
-            status: 'valid',
-            message: 'SPF record contains the Cordial include',
-            value: spfRecord,
-            matchesExpected: true
-          };
-        }
-
-        // Case 3: Record exists but doesn't contain Cordial include
         return {
           isValid: true,
-          status: 'review',
-          message: 'SPF record found but needs review',
-          value: spfRecord,
-          matchesExpected: false
+          status: 'valid',
+          message: 'Valid SPF record',
+          value: actualValue,
+          matchesExpected: true
         };
       }
       

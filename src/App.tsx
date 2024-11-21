@@ -5,13 +5,14 @@ import { verifyDNSRecord } from './utils/dnsChecker';
 import { DNSRecord, DNSRecordStatus } from './types';
 import { Database } from 'lucide-react';
 import { DNSCheckConfig } from './types/config';
-import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 const defaultConfig: DNSCheckConfig = {
   spf: {
     requireExactMatch: false,
-    requiredIncludes: ['include:_spf.cordialmail.net ~all'],
-    allowPartialMatch: true
+    requiredIncludes: ['include:_spf.cordialmail.net'],
+    allowPartialMatch: true,
+    validAllModifiers: ['-all', '~all']
   },
   dkim: {
     requireExactMatch: true,
