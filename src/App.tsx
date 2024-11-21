@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { InputTabs } from './components/InputTabs';
 import { ResultsTable } from './components/ResultsTable';
 import { verifyDNSRecord } from './utils/dnsChecker';
@@ -54,7 +54,7 @@ function ErrorFallback({ error }: { error: Error }) {
 function App() {
   const [records, setRecords] = useState<DNSRecord[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [config, setConfig] = useState<DNSCheckConfig>(defaultConfig);
+  const [config] = useState<DNSCheckConfig>(defaultConfig);
 
   const handleRecordsLoaded = async (loadedRecords: DNSRecord[]) => {
     setError(null);
@@ -101,10 +101,6 @@ function App() {
         );
       }
     }
-  };
-
-  const handleConfigUpdate = (newConfig: DNSCheckConfig) => {
-    setConfig(newConfig);
   };
 
   const handleTabChange = () => {

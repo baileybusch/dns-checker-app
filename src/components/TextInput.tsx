@@ -6,10 +6,10 @@ interface TextInputProps {
 }
 
 export function TextInput({ onRecordsLoaded }: TextInputProps) {
-  const [text, setText] = useState('');
+  const [inputValue, setInputValue] = useState('');
 
   const handleSubmit = () => {
-    const lines = text.trim().split('\n');
+    const lines = inputValue.trim().split('\n');
     if (lines.length === 0) return;
 
     const records: DNSRecord[] = [];
@@ -88,17 +88,17 @@ export function TextInput({ onRecordsLoaded }: TextInputProps) {
 
     if (records.length > 0) {
       onRecordsLoaded(records);
-      setText('');
+      setInputValue('');
     }
   };
 
-  const hasValidInput = text.trim().split('\n').some(line => line.split('\t').length >= 10);
+  const hasValidInput = inputValue.trim().split('\n').some(line => line.split('\t').length >= 10);
 
   return (
     <div className="space-y-4">
       <textarea
-        value={text}
-        onChange={(e) => setText(e.target.value)}
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
         placeholder="Paste your tab-separated DNS records here..."
         className="w-full h-48 p-4 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
       />

@@ -2,27 +2,17 @@ import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Upload } from 'lucide-react';
 import Papa, { ParseResult } from 'papaparse';
-import { DNSRecord } from '../types';
+import { DNSRecord, DNSRecordType } from '../types';
 
 interface FileUploadProps {
   onRecordsLoaded: (records: DNSRecord[]) => void;
 }
 
 interface CSVRow {
-  'sending_domain': string;
-  'SPF host': string;
-  'SPF record (TXT record type)': string;
-  'DKIM host': string;
-  'DKIM record (TXT record type)': string;
-  'CNAME host': string;
-  'CNAME record': string;
-  'DMARC host': string;
-  'DMARC record (TXT record type)': string;
-  'MX host': string;
-  'MX record A': string;
-  'MX record B': string;
-  'MX priority': string;
-  [key: string]: string;
+  type: DNSRecordType;
+  domain: string;
+  value: string;
+  expectedValue?: string;
 }
 
 export function FileUpload({ onRecordsLoaded }: FileUploadProps) {

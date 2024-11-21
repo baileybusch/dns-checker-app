@@ -245,7 +245,7 @@ export async function verifyDNSRecord(record: any, config: DNSCheckConfig) {
         
         const exactMatch = mxRecords.length === 2 && 
           expectedMXRecords.every(expected => 
-            mxRecords.some(mx => mx.toLowerCase() === expected.toLowerCase())
+            mxRecords.some((mx: string) => mx.toLowerCase() === expected.toLowerCase())
           );
 
         if (exactMatch) {
@@ -287,7 +287,7 @@ export async function verifyDNSRecord(record: any, config: DNSCheckConfig) {
   }
 }
 
-export async function getDomainRecords(domain: string) {
+export async function getDomainRecords(domain: string): Promise<DNSRecord[]> {
   return [
     {
       type: 'SPF',
@@ -320,5 +320,5 @@ export async function getDomainRecords(domain: string) {
       value: 'Checking...',
       status: 'pending'
     }
-  ];
+  ] as DNSRecord[];
 }
