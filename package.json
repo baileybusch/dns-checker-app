@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview",
-    "generate-favicon": "tsx scripts/generate-favicon.ts"
+    "preview": "vite preview"
   },
   "dependencies": {
     "lucide-react": "^0.344.0",
@@ -18,7 +17,6 @@
     "react-error-boundary": "^4.0.12"
   },
   "devDependencies": {
-    "@eslint/js": "^9.9.1",
     "@types/node": "^20.11.28",
     "@types/papaparse": "^5.3.14",
     "@types/react": "^18.3.5",
@@ -28,13 +26,10 @@
     "eslint": "^9.9.1",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.11",
-    "globals": "^15.9.0",
     "postcss": "^8.4.35",
     "sharp": "^0.33.2",
     "tailwindcss": "^3.4.1",
-    "tsx": "^4.7.1",
     "typescript": "^5.5.3",
-    "typescript-eslint": "^8.3.0",
     "vite": "^5.4.11"
   }
 }

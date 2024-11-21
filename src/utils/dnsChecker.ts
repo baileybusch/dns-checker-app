@@ -1,7 +1,9 @@
-const DNS_API_ENDPOINT = 'https://cloudflare-dns.com/dns-query';
+import { DNSRecord } from '../types';
 import { DNSCheckConfig } from '../types/config';
 
-export async function verifyDNSRecord(record: any, config: DNSCheckConfig) {
+const DNS_API_ENDPOINT = 'https://cloudflare-dns.com/dns-query';
+
+export async function verifyDNSRecord(record: DNSRecord, config: DNSCheckConfig) {
   try {
     let queryType = record.type;
     let domain = record.domain;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, ChangeEvent } from 'react';
 import { DNSRecord } from '../types';
 
 interface TextInputProps {
@@ -14,11 +14,9 @@ export function TextInput({ onRecordsLoaded }: TextInputProps) {
 
     const records: DNSRecord[] = [];
 
-    lines.forEach(line => {
+    lines.forEach((line: string) => {
       const values = line.split('\t');
-      if (values.length < 10) return; // Skip invalid lines
-
-      const domain = values[0]; // Base domain
+      if (values.length < 10) return;
 
       // SPF Record
       if (values[1] && values[2]) {
@@ -92,13 +90,17 @@ export function TextInput({ onRecordsLoaded }: TextInputProps) {
     }
   };
 
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setInputValue(e.target.value);
+  };
+
   const hasValidInput = inputValue.trim().split('\n').some(line => line.split('\t').length >= 10);
 
   return (
     <div className="space-y-4">
       <textarea
         value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
+        onChange={handleChange}
         placeholder="Paste your tab-separated DNS records here..."
         className="w-full h-48 p-4 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
       />

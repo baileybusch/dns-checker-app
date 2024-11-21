@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, ChangeEvent } from 'react';
 import { DNSCheckConfig } from '../types/config';
 
 interface ConfigPageProps {
@@ -9,7 +9,7 @@ interface ConfigPageProps {
 export function ConfigPage({ config, onConfigUpdate }: ConfigPageProps) {
   const [currentConfig, setCurrentConfig] = useState<DNSCheckConfig>(config);
 
-  const handleChange = (section: keyof DNSCheckConfig, field: string, value: any) => {
+  const handleChange = (section: keyof DNSCheckConfig, field: string, value: string | boolean | string[]) => {
     setCurrentConfig(prev => ({
       ...prev,
       [section]: {

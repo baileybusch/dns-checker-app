@@ -63,16 +63,16 @@ function App() {
     for (let i = 0; i < loadedRecords.length; i++) {
       const record = loadedRecords[i];
       try {
-        setRecords(current =>
-          current.map((r, index) =>
+        setRecords((current: DNSRecord[]) =>
+          current.map((r: DNSRecord, index: number) =>
             index === i ? { ...r, isLoading: true } : r
           )
         );
         
         const result = await verifyDNSRecord(record, config);
         
-        setRecords(current =>
-          current.map((r, index) =>
+        setRecords((current: DNSRecord[]) =>
+          current.map((r: DNSRecord, index: number) =>
             index === i
               ? {
                   ...r,
@@ -88,8 +88,8 @@ function App() {
         );
       } catch (error) {
         setError('Failed to verify DNS records. Please try again.');
-        setRecords(current =>
-          current.map((r, index) =>
+        setRecords((current: DNSRecord[]) =>
+          current.map((r: DNSRecord, index: number) =>
             index === i
               ? {
                   ...r,

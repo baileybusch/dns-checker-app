@@ -1,19 +1,37 @@
 import React, { useCallback, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
+import { useDropzone, DropzoneOptions } from 'react-dropzone';
 import { Upload } from 'lucide-react';
-import Papa, { ParseResult } from 'papaparse';
-import { DNSRecord, DNSRecordType } from '../types';
+import Papa from 'papaparse';
+import type { ParseResult } from 'papaparse';
+import { DNSRecord } from '../types';
 
 interface FileUploadProps {
   onRecordsLoaded: (records: DNSRecord[]) => void;
 }
 
 interface CSVRow {
-  type: DNSRecordType;
-  domain: string;
-  value: string;
-  expectedValue?: string;
+  'sending_domain': string;
+  'SPF host': string;
+  'SPF record (TXT record type)': string;
+  'DKIM host': string;
+  'DKIM record (TXT record type)': string;
+  'CNAME host': string;
+  'CNAME record': string;
+  'DMARC host': string;
+  'DMARC record (TXT record type)': string;
+  'MX host': string;
+  'MX record A': string;
+  'MX record B': string;
+  'MX priority': string;
+  [key: string]: string;
 }
+
+const dropzoneOptions: DropzoneOptions = {
+  accept: {
+    'text/csv': ['.csv']
+  },
+  multiple: false
+};
 
 export function FileUpload({ onRecordsLoaded }: FileUploadProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -29,11 +47,8 @@ export function FileUpload({ onRecordsLoaded }: FileUploadProps) {
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    accept: {
-      'text/csv': ['.csv']
-    },
-    multiple: false
+    ...dropzoneOptions,
+    onDrop
   });
 
   const handleSubmit = () => {
@@ -60,7 +75,7 @@ export function FileUpload({ onRecordsLoaded }: FileUploadProps) {
 
           const allRecords: DNSRecord[] = [];
 
-          results.data.forEach(row => {
+          results.data.forEach((row: CSVRow) => {
             if (!row['sending_domain']) {
               console.warn('Skipping row without sending domain:', row);
               return;
